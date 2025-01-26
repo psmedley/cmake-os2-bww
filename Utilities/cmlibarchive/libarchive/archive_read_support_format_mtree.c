@@ -47,6 +47,9 @@
 #ifdef HAVE_CTYPE_H
 #include <ctype.h>
 #endif
+#ifdef __OS2__
+size_t	 strnlen(const char *, size_t);
+#endif
 
 #include "archive.h"
 #include "archive_entry.h"

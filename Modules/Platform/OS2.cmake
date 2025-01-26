@@ -49,7 +49,7 @@ SET(CMAKE_SHARED_LIBRARY_PREFIX "")
 SET(CMAKE_SHARED_LIBRARY_SUFFIX ".dll")
 SET(CMAKE_SHARED_LIBRARY_C_FLAGS " ")
 SET(CMAKE_SHARED_LIBRARY_CXX_FLAGS " ")
-SET(CMAKE_SHARED_LINKER_FLAGS_INIT "-Zomf -Zdll -Zlinker DISABLE -Zlinker 1121")
+SET(CMAKE_SHARED_LINKER_FLAGS_INIT "-Zomf -Zdll -Zmap -Zlinker DISABLE -Zlinker 1121 -lcx -lssp")
 # Shared libraries on OS/2 are named with their version number.
 SET(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
 
@@ -57,7 +57,7 @@ SET(CMAKE_SHARED_LIBRARY_NAME_WITH_VERSION 1)
 SET(CMAKE_SHARED_MODULE_CREATE_C_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS})
 SET(CMAKE_SHARED_MODULE_PREFIX "")
 SET(CMAKE_SHARED_MODULE_SUFFIX ".dll")
-SET(CMAKE_MODULE_LINKER_FLAGS_INIT "-Zomf -Zdll -Zlinker DISABLE -Zlinker 1121")
+SET(CMAKE_MODULE_LINKER_FLAGS_INIT "-Zomf -Zdll -Zmap -Zlinker DISABLE -Zlinker 1121 -lcx -lssp")
 # Modules have a different default prefix than shared libs.
 SET(CMAKE_MODULE_EXISTS 1)
 
@@ -71,7 +71,7 @@ SET(CMAKE_STATIC_LIBRARY_SUFFIX ".a")
 
 # set flags for executables
 SET(CMAKE_EXECUTABLE_SUFFIX ".exe")
-SET(CMAKE_EXE_LINKER_FLAGS_INIT "-Zomf -Zlinker DISABLE -Zlinker 1121")
+SET(CMAKE_EXE_LINKER_FLAGS_INIT "-Zomf -Zmap -Zlinker DISABLE -Zlinker 1121 -lcx -lssp")
 
 # set compiler options
 SET(CMAKE_C_COMPILE_OPTIONS_PIC "")
@@ -125,7 +125,10 @@ SET(CMAKE_CXX_CREATE_SHARED_MODULE
 
 # create the timestamp and build maschine name
 string(TIMESTAMP TSbldLevel "%d %b %Y %H:%M:%S")
-exec_program(uname ARGS -n OUTPUT_VARIABLE unamebldLevel)
+execute_process(COMMAND ${CMAKE_UNAME} -r
+    OUTPUT_VARIABLE unamebldLevel
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET)
 SET(bldLevelInfo "\#\#1\#\# ${TSbldLevel}\\ \\ \\ \\ \\ ${unamebldLevel}")
 
 # there is the possibility to rely on EMXEXP instead of dllexport on CXX
